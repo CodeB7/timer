@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Samadhi</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<!--   <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
+-->
+<link rel="stylesheet" media="screen" href="https://fontlibrary.org//face/segment7" type="text/css"/>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+<style type="text/css">
+  .clock-text {
+    font-size: 30px;
+    margin-left: 50px;
+    color: black;
+  }
+
+  #clock {
+    margin-top: 300px;
+    font-size: 50px;
+    color: red;
+  }
+
+  #years, #months, #days, #hours, #minutes, #seconds {
+    /*font-family: 'Orbitron', sans-serif;*/
+    font-family: 'Segment7Standard';
+    font-weight: bold;
+    font-style: italic;
+    background-color: black;
+    border: 10px yellow solid;
+    padding: 15px 10px 15px 10px;
+    margin-left: 30px;
+  }
+
+</style>
+
+</head>
+<body onload="showTimer();">
+  <script type="text/javascript">
+    function showTimer() {
+      var x = setInterval(function() {
+        calculate();
+      }, 1000);      
+    }
+    function calculate() {
+     var toDate = "2032-03-10";
+     var now = new Date();
+     var currentMonth = now.getMonth() + 1;
+     var fromDate = now.getFullYear() + "-" + currentMonth + "-" + now.getDate();
+     var countDownDate = new Date("Mar 10, 2032 0:0:0").getTime();
+     var distance = countDownDate - now;
+
+     // Find the distance between now and the count down date
+     var distance = countDownDate - now;
+
+    // Time calculations for days, hours, minutes and seconds
+    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+
+    function getDateDifference(startDate, endDate) {
+     if (startDate > endDate) {
+       console.error('Start date must be before end date');
+       return null;
+     }
+     var startYear = startDate.getFullYear();
+     var startMonth = startDate.getMonth();
+     var startDay = startDate.getDate();
+
+     var endYear = endDate.getFullYear();
+     var endMonth = endDate.getMonth();
+     var endDay = endDate.getDate();
+
+         // We calculate February based on end year as it might be a leep year which might influence the number of days.
+         var february = (endYear % 4 == 0 && endYear % 100 != 0) || endYear % 400 == 0 ? 29 : 28;
+         var daysOfMonth = [31, february, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+         
+         var startDateNotPassedInEndYear = (endMonth < startMonth) || endMonth == startMonth && endDay < startDay;
+         var years = endYear - startYear - (startDateNotPassedInEndYear ? 1 : 0);
+         
+         var months = (12 + endMonth - startMonth - (endDay < startDay ? 1 : 0)) % 12;
+         
+         // (12 + ...) % 12 makes sure index is always between 0 and 11
+         var days = startDay <= endDay ? endDay - startDay : daysOfMonth[(12 + endMonth - 1) % 12] - startDay + endDay;
+         
+         // alert(years + "Y " + months + "m " + days + " d");
+         
+         return {
+           years: years,
+           months: months,
+           days: days
+         };
+       }
+       try {
+         document.getElementById('years').innerHTML = '';
+         document.getElementById('months').innerHTML = '';
+         document.getElementById('days').innerHTML = '';
+         document.getElementById('hours').innerHTML = '';
+         document.getElementById('minutes').innerHTML = '';
+         document.getElementById('seconds').innerHTML = '';
+         
+         var result = getDateDifference(new Date(fromDate), new Date(toDate));
+         
+         // if (result && !isNaN(result.years)) {
+         //   document.getElementById('result').innerHTML =
+         //   result.years + ' year' + (result.years == 1 ? ' ' : 's ') +
+         //   result.months + ' month' + (result.months == 1 ? ' ' : 's ') + 'and ' +
+         //   result.days + ' day' + (result.days == 1 ? '' : 's') + " " +
+         //   hours + ' hours and ' + minutes + ' minutes ' + seconds + ' seconds';
+         // }
+         document.getElementById('years').innerHTML = (result.years >= 0 && result.years <= 9 ? '0' + result.years : result.years);
+         document.getElementById('months').innerHTML = (result.months >= 0 && result.months <= 9 ? '0' + result.months : result.months);
+         document.getElementById('days').innerHTML = (result.days >= 0 && result.days <= 9 ? '0' + result.days : result.days);
+         if (hours < 0)
+            hours = 0
+         if (minutes < 0)
+            minutes = 0
+          if (seconds < 0)
+            seconds = 0
+         document.getElementById('hours').innerHTML = (hours >= 0 && hours <= 9 ? '0' + hours : hours);
+         document.getElementById('minutes').innerHTML = (minutes >= 0 && minutes <= 9 ? '0' + minutes : minutes);
+         document.getElementById('seconds').innerHTML = (seconds >= 0 && seconds <= 9 ? '0' + seconds : seconds);
+       } catch (e) {
+         console.error(e);
+       }
+     }
+   </script>
+
+   <div id="clock" class="col-md-12 text-center">
+     <p class="clock-text">Years&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Months&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Days&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Hours&nbsp;&nbsp;&nbsp;&nbsp;Minutes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Seconds</p>
+     <span id="years"></span>
+     <span id="months"></span>
+     <span id="days"></span>
+     <span id="hours"></span>
+     <span id="minutes"></span>
+     <span id="seconds"></span>     
+   </div>
+ </body>
+ </html>
